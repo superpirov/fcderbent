@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель — ФК «Дербент»</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+  <!-- Экран входа -->
+  <div class="login-screen" id="login-screen" style="display:none">
+    <form class="login-card" id="login-form">
+      <img src="images/logo.png" alt="ФК Дербент">
+      <h1>Админ-панель клуба</h1>
+      <p>Введите пароль администратора</p>
+      <input type="password" id="login-password" placeholder="Пароль" autocomplete="current-password">
+      <div class="login-error" id="login-error"></div>
+      <button class="btn btn-primary btn-block" type="submit">Войти</button>
+      <p style="margin-top:18px;font-size:12px">Пароль по умолчанию: <code>derbent1966</code> — смените его в разделе «Настройки»</p>
+      <p style="margin-top:8px;font-size:12px"><a href="index.html" style="color:var(--muted)">← Вернуться на сайт</a></p>
+    </form>
+  </div>
+
+  <!-- Панель -->
+  <div class="admin-layout" id="admin-layout" style="display:none">
+    <aside class="sidebar">
+      <div class="side-brand">
+        <img src="images/logo.png" alt="">
+        <div><b>ФК «Дербент»</b><span>Админ-панель</span></div>
+      </div>
+      <nav id="side-nav"></nav>
+      <div class="side-footer">
+        <a href="index.html" target="_blank">← Открыть сайт</a>
+        <button class="side-link" id="logout-btn" style="color:#cbb9a4">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <div class="topbar">
+        <h2 id="section-title">Настройки <span class="dirty-dot" id="dirty-dot" title="Есть несохранённые изменения"></span></h2>
+        <div class="actions">
+          <button class="btn btn-outline btn-sm" id="reset-btn">Сбросить изменения</button>
+          <button class="btn btn-dark btn-sm" id="export-btn">Экспорт data.js</button>
+          <button class="btn btn-primary btn-sm" id="save-btn">Сохранить (предпросмотр)</button>
+        </div>
+      </div>
+      <div id="admin-root"></div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="data/data.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

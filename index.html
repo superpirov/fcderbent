@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ФК «Дербент» — любительский футбольный клуб с историей</title>
+  <meta name="description" content="Футбольный клуб «Дербент» — любительский футбольный клуб с историей. Основан в 1966 году. Новости, матчи, турнирная таблица чемпионата Дагестана.">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="home">
+  <header class="site-header" id="site-header"></header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="images/hero.jpg" alt="Стадион" fetchpriority="high" id="hero-img">
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-badge"><span class="dot"></span><span id="hero-badge-text">Любительский футбольный клуб · с 1966 года</span></div>
+      <h1 class="hero-title" id="hero-title">Дербент</h1>
+      <p class="hero-sub" id="hero-sub">Любительский футбольный клуб с историей</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="club-card.html">История клуба
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="team-squad.html">Состав команды</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">1966</div><div class="lbl">год основания</div></div>
+        <div class="hero-stat"><div class="num">60</div><div class="lbl">лет истории</div></div>
+        <div class="hero-stat"><div class="num">«Нарын-кала»</div><div class="lbl">домашняя арена</div></div>
+        <div class="hero-stat"><div class="num">2026</div><div class="lbl">чемпионат Дагестана</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- НОВОСТИ -->
+  <section class="section" id="news">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">Новости клуба</span>
+          <h2 class="section-title">Последние события</h2>
+        </div>
+      </div>
+      <div class="news-grid" id="news-grid"></div>
+    </div>
+  </section>
+
+  <!-- СЫГРАННЫЕ МАТЧИ -->
+  <section class="section" id="matches" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">Сезон 2026</span>
+          <h2 class="section-title">Сыгранные матчи</h2>
+          <p class="section-sub">Матчи ФК «Дербент» и других клубов чемпионата Дагестана</p>
+        </div>
+        <div class="tabs">
+          <button class="tab active" data-filter="all">Все матчи</button>
+          <button class="tab" data-filter="derbent">ФК Дербент</button>
+        </div>
+      </div>
+      <div class="matches-list" id="matches-list"></div>
+      <div class="matches-more" id="matches-more">
+        <button class="btn btn-ghost btn-sm"><span>Показать все матчи</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ТУРНИРНАЯ ТАБЛИЦА -->
+  <section class="section" id="standings">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">Сезон 2026</span>
+          <h2 class="section-title">Турнирная таблица</h2>
+          <p class="section-sub">Чемпионат Дагестана 2026</p>
+        </div>
+      </div>
+      <div class="table-wrap reveal">
+        <table class="standings">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th class="t-left">Клуб</th>
+              <th>И</th><th>В</th><th>Н</th><th>П</th><th>Мячи</th><th>РМ</th><th>О</th>
+            </tr>
+          </thead>
+          <tbody id="standings-body"></tbody>
+        </table>
+      </div>
+      <div class="table-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Регламент турнира соответствует правилам FIFA: победа — 3 очка, ничья — 1, поражение — 0.
+        Места распределяются по: очкам → разнице мячей → количеству забитых мячей.
+        И — игры, В — выигрыши, Н — ничьи, П — проигрыши, РМ — разница мячей, О — очки.
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+  <script src="data/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

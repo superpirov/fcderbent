@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вакансии — ФК «Дербент»</title>
+  <meta name="description" content="Вакансии футбольного клуба «Дербент» и форма обратной связи для кандидатов.">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="vacancies">
+  <header class="site-header" id="site-header"></header>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs"><a href="index.html">Главная</a><span class="sep">/</span><a href="#">Клуб</a><span class="sep">/</span><span>Вакансии</span></div>
+      <h1 class="page-title">Вакансии</h1>
+      <p class="page-desc">Работайте в футболе — развивайте дербентский спорт вместе с нами.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:820px">
+      <div class="empty-state reveal" style="padding-top:20px;padding-bottom:30px">
+        <div class="es-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+        <h3>Открытых вакансий сейчас нет</h3>
+      </div>
+      <div class="prose reveal" id="vacancies-intro" style="margin-bottom:40px"></div>
+
+      <div class="form-card reveal">
+        <h3 style="margin-bottom:8px">Форма обратной связи</h3>
+        <p style="color:var(--muted);font-size:14.5px;margin-bottom:24px">Расскажите о себе — и мы свяжемся с вами, когда появится подходящая вакансия.</p>
+        <form id="vacancies-form">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="v-name">Ваше имя *</label>
+              <input id="v-name" name="name" type="text" required placeholder="Иван Иванов">
+            </div>
+            <div class="form-field">
+              <label for="v-phone">Телефон *</label>
+              <input id="v-phone" name="phone" type="tel" required placeholder="+7 (___) ___-__-__">
+            </div>
+            <div class="form-field full">
+              <label for="v-email">E-mail</label>
+              <input id="v-email" name="email" type="email" placeholder="you@example.com">
+            </div>
+            <div class="form-field full">
+              <label for="v-msg">Сообщение / краткое резюме *</label>
+              <textarea id="v-msg" name="message" required placeholder="Кем вы работали, что умеете, почему вам интересен наш клуб…"></textarea>
+            </div>
+          </div>
+          <div style="margin-top:22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+            <button type="submit" class="btn btn-primary">Отправить заявку</button>
+          </div>
+        </form>
+        <div class="form-success" id="vacancies-success" style="margin-top:20px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Спасибо! Мы внесли вас в базу кандидатов клуба.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+  <script src="data/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

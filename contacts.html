@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Контакты — ФК «Дербент»</title>
+  <meta name="description" content="Контакты футбольного клуба «Дербент»: адрес, телефон, e-mail, социальные сети.">
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="contacts">
+  <header class="site-header" id="site-header"></header>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumbs"><a href="index.html">Главная</a><span class="sep">/</span><span>Контакты</span></div>
+      <h1 class="page-title">Контакты</h1>
+      <p class="page-desc">Свяжитесь с нами — мы всегда рады болельщикам, партнёрам и журналистам.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="info-grid reveal">
+        <div class="info-card">
+          <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h4>Адрес</h4>
+          <p id="c-address"></p>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <h4>Телефоны</h4>
+          <p><a id="c-phone-link" href="#"><span id="c-phone"></span></a><br><a id="c-phone-extra-link" href="#"><span id="c-phone-extra"></span></a></p>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <h4>E-mail</h4>
+          <p><a id="c-email-link" href="#"><span id="c-email"></span></a><br><span id="c-press"></span></p>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <h4>Часы работы офиса</h4>
+          <p id="c-hours"></p>
+        </div>
+        <div class="info-card">
+          <div class="ic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h4>Социальные сети</h4>
+          <div class="socials" id="c-social" style="margin-top:6px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="container">
+      <div class="history-block">
+        <div class="reveal">
+          <span class="kicker">Обратная связь</span>
+          <h2 class="section-title" style="font-size:clamp(22px,3vw,30px);margin-bottom:16px">Напишите нам</h2>
+          <p style="color:var(--muted);margin-bottom:24px">Вопросы о клубе, билетах, сотрудничестве или спортивной школе? Заполните форму — мы ответим в течение нескольких рабочих дней.</p>
+          <div class="form-card">
+            <form id="contacts-form">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="ct-name">Ваше имя *</label>
+                  <input id="ct-name" type="text" required placeholder="Иван Иванов">
+                </div>
+                <div class="form-field">
+                  <label for="ct-contact">Телефон или e-mail *</label>
+                  <input id="ct-contact" type="text" required placeholder="+7 (___) ___-__-__">
+                </div>
+                <div class="form-field full">
+                  <label for="ct-msg">Сообщение *</label>
+                  <textarea id="ct-msg" required placeholder="Текст вашего сообщения…"></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top:22px">Отправить сообщение</button>
+            </form>
+            <div class="form-success" id="contacts-success" style="margin-top:20px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>Сообщение отправлено! Мы свяжемся с вами в ближайшее время.</span>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <span class="kicker">Как нас найти</span>
+          <h2 class="section-title" style="font-size:clamp(22px,3vw,30px);margin-bottom:16px">Карта</h2>
+          <div style="border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:380px;background:var(--surface)">
+            <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%91%D1%83%D0%B9%D0%BD%D0%B0%D0%BA%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%2029%2F2&z=16"
+                    width="100%" height="420" frameborder="0" allowfullscreen="true" loading="lazy" style="display:block"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" id="site-footer"></footer>
+  <script src="data/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
