@@ -429,27 +429,40 @@ function bindExportButtons() {
 }
 
 // ---------- Коллекции: добавление/удаление/перемещение ----------
-function findIndexById(collection, id) {
-  return DATA[collection].findIndex(x => `${collection.slice(0, -1)}:${x.id}` === id || x.id === id);
-}
 function uid() { return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-
+function openAndScroll(id) {
+  OPEN.add(id);
+  markDirty();
+  render();
+  setTimeout(() => {
+    const el = document.querySelector(`[data-block="${id}"]`);
+    if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 60);
+}
 function addNews() {
-  DATA.news.unshift({ id: uid(), date: new Date().toISOString().slice(0, 10), title: 'Заголовок новости', excerpt: '', image: '', content: '' });
-  refresh('news');
+  const item = { id: uid(), date: new Date().toISOString().slice(0, 10), title: 'Заголовок новости', excerpt: '', image: '', content: '' };
+  DATA.news.unshift(item);
+  openAndScroll(`news:${item.id}`);
+  toast('Новость добавлена — заполните поля в карточке');
 }
 function addMatch() {
   const t = DATA.teams || [];
-  DATA.matches.push({ id: uid(), date: new Date().toISOString().slice(0, 10), home: t[0]?.id || '', away: t[1]?.id || '', homeScore: 0, awayScore: 0, venue: '', league: 'championat' });
-  refresh('matches');
+  const item = { id: uid(), date: new Date().toISOString().slice(0, 10), home: t[0]?.id || '', away: t[1]?.id || '', homeScore: 0, awayScore: 0, venue: '', league: 'championat' };
+  DATA.matches.push(item);
+  openAndScroll(`match:${item.id}`);
+  toast('Матч добавлен — укажите команды и счёт');
 }
 function addPlayer() {
-  DATA.players.push({ id: uid(), name: 'Новый игрок', position: 'MF', number: 0, birthDate: '2000-01-01', photo: '', stats: { matches: 0, goals: 0 }, bio: '' });
-  refresh('players');
+  const item = { id: uid(), name: 'Новый игрок', position: 'MF', number: 0, birthDate: '2000-01-01', photo: '', stats: { matches: 0, goals: 0, assists: 0 }, bio: '' };
+  DATA.players.push(item);
+  openAndScroll(`player:${item.id}`);
+  toast('Игрок добавлен — выберите позицию и заполните карточку');
 }
 function addPerson(key) {
-  DATA[key].push({ id: uid(), name: 'ФИО', role: 'Должность', photo: '', bio: '' });
-  refresh(key);
+  const item = { id: uid(), name: 'ФИО', role: 'Должность', photo: '', bio: '' };
+  DATA[key].push(item);
+  openAndScroll(`${key}:${item.id}`);
+  toast('Карточка добавлена — заполните поля');
 }
 
 function handleAction(action, id, key) {

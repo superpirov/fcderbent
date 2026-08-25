@@ -706,6 +706,56 @@ window.SITE_DATA = {
       "awayScore": 3,
       "venue": "Стадион «РДЮСШ»",
       "league": "championat"
+    },
+    {
+      "id": "m10-1",
+      "date": "2026-08-15",
+      "home": "derbent",
+      "away": "pobeda-2",
+      "homeScore": 1,
+      "awayScore": 2,
+      "venue": "Стадион «Нарын-кала»",
+      "league": "championat"
+    },
+    {
+      "id": "m10-2",
+      "date": "2026-08-15",
+      "home": "dinamo-2009",
+      "away": "uor-kaspiysk",
+      "homeScore": 6,
+      "awayScore": 0,
+      "venue": "Стадион «Труд»",
+      "league": "championat"
+    },
+    {
+      "id": "m10-3",
+      "date": "2026-08-17",
+      "home": "kaspiysk",
+      "away": "leki",
+      "homeScore": 1,
+      "awayScore": 5,
+      "venue": "Стадион «УОР»",
+      "league": "championat"
+    },
+    {
+      "id": "m10-4",
+      "date": "2026-08-17",
+      "home": "dinamo-dag",
+      "away": "rdyussh",
+      "homeScore": 1,
+      "awayScore": 0,
+      "venue": "Стадион «Труд»",
+      "league": "championat"
+    },
+    {
+      "id": "m10-5",
+      "date": "2026-08-18",
+      "home": "yulduz",
+      "away": "khas-rayon",
+      "homeScore": 1,
+      "awayScore": 4,
+      "venue": "Стадион «Юлдуз»",
+      "league": "championat"
     }
   ],
   "players": [

@@ -1,6 +1,6 @@
 // Генератор data/data.js из WordPress-экспорта (_import/*.xml) и шаблона (data/template.json)
 // Запуск: node scripts/build-data.mjs
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -110,6 +110,15 @@ for (const it of items(matchesXml)) {
   });
 }
 matches.sort((a, b) => a.date.localeCompare(b.date));
+
+// Дополнительные матчи (не из XML-экспорта), например новые туры
+const extraPath = resolve(ROOT, '_import/extra-matches.json');
+if (existsSync(extraPath)) {
+  const extra = JSON.parse(readFileSync(extraPath, 'utf8'));
+  const known = new Set(matches.map(m => m.id));
+  for (const m of extra) if (!known.has(m.id)) matches.push(m);
+  matches.sort((a, b) => a.date.localeCompare(b.date));
+}
 
 // --- Сборка ---
 const tpl = JSON.parse(readFileSync(resolve(ROOT, 'data/template.json'), 'utf8'));

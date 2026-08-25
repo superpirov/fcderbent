@@ -52,7 +52,24 @@ function run(file, sandbox) {
     const html = getEl('#admin-root').innerHTML;
     if (!html || html.length < 50) throw new Error('admin: section "' + s + '" rendered empty');
   }
-  console.log('ADMIN SMOKE OK — вход и все 10 секций рендерятся');
+  const countBlocks = (marker) => getEl('#admin-root').innerHTML.split(marker).length - 1;
+  const clickBtn = (action) => getEl('#admin-root')._h['click']({ stopPropagation() {}, target: { closest: () => ({ dataset: { action } }) } });
+  const checks = [
+    ['news', 'add-news', 'data-block="news:', 'Заголовок новости'],
+    ['matches', 'add-match', 'data-block="match:', 'Предпросмотр турнирной таблицы'],
+    ['players', 'add-player', 'data-block="player:', 'Новый игрок'],
+    ['coaches', 'add-coaches', 'data-block="coaches:', 'ФИО'],
+    ['management', 'add-management', 'data-block="management:', 'ФИО']
+  ];
+  for (const [sec, action, marker, expect] of checks) {
+    getEl('#side-nav')._h['click']({ target: { closest: () => ({ dataset: { section: sec } }) } });
+    const before = countBlocks(marker);
+    clickBtn(action);
+    const after = countBlocks(marker);
+    if (after !== before + 1) throw new Error(`admin: ${action} failed (${before} -> ${after})`);
+    if (!getEl('#admin-root').innerHTML.includes(expect)) throw new Error(`admin: ${action} block content missing`);
+  }
+  console.log('ADMIN SMOKE OK — вход, 10 секций и все кнопки добавления работают');
 }
 
 // ---------- Главная ----------
