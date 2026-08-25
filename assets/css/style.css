@@ -397,14 +397,13 @@ h1, h2, h3, .display { font-family: var(--font-display); font-weight: 700; line-
 
 /* ---------- Партнёры ---------- */
 .partners { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: clamp(36px, 5vw, 56px) 0; }
-.partners-grid { display: flex; justify-content: flex-start; align-items: center; gap: clamp(32px, 6vw, 64px); flex-wrap: wrap; }
-.partner-logo { display: flex; align-items: center; justify-content: center; opacity: 0.9; transition: opacity 0.2s ease, transform 0.2s ease; }
+.partners-grid { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 48px; flex-wrap: nowrap; }
+.partner-logo { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; opacity: 0.9; transition: opacity 0.2s ease, transform 0.2s ease; }
 .partner-logo:hover { opacity: 1; transform: translateY(-2px); }
-.partner-logo img { height: 48px; width: auto; max-width: 200px; object-fit: contain; }
-.partner-logo:nth-child(2) img { height: 62px; }
+.partner-logo img { height: 52px; width: auto; max-width: 220px; object-fit: contain; }
 @media (max-width: 640px) {
-  .partner-logo img { height: 40px; max-width: 160px; }
-  .partner-logo:nth-child(2) img { height: 52px; }
+  .partners-grid { gap: 24px; }
+  .partner-logo img { height: 40px; max-width: 150px; }
 }
 
 /* ---------- Подвал ---------- */
