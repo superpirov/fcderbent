@@ -8,6 +8,9 @@
 const LS_KEY = 'fcderbent_data_v1';
 const SESSION_KEY = 'fcderbent_admin_session';
 
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
 // ---------- Хеш пароля (djb2) ----------
 function pwHash(s) {
   let h = 5381;
@@ -283,6 +286,7 @@ function sectionPlayers() {
           ${dateField(`players.${i}.birthDate`, 'Дата рождения')}
           ${numField(`players.${i}.stats.matches`, 'Матчей')}
           ${numField(`players.${i}.stats.goals`, 'Голов')}
+          ${numField(`players.${i}.stats.assists`, 'Ассистов')}
           ${imageField(`players.${i}.photo`, 'Фото игрока')}
           ${textareaField(`players.${i}.bio`, 'Биография (абзацы разделяйте переносом строки)')}
         </div>`

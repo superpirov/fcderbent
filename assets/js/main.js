@@ -115,7 +115,9 @@ const ICONS = {
   ball: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3L4.3 7.6l5.3-.8z"/><path d="M7.5 21.5l1.9-5.6M16.5 21.5l-1.9-5.6M2.5 9.5l5.9 2.1M21.5 9.5l-5.9 2.1"/></svg>',
   vk: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.16 17.86c-5.61 0-8.81-3.85-8.95-10.28h2.81c.1 4.71 2.17 6.71 3.82 7.12V7.58h2.64v4.07c1.63-.17 3.34-2.03 3.91-4.07h2.64c-.44 2.51-2.3 4.37-3.62 5.13 1.32.61 3.44 2.24 4.24 5.15h-2.9c-.63-1.97-2.21-3.5-4.37-3.7v3.7h-.22z"/></svg>',
   tg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.6 18.9 19c-.2 1-.8 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-.9.5l.3-4.6L18.3 7c.4-.3-.1-.5-.6-.2L7.3 13.3 2.9 12c-1-.3-1-1 .2-1.4l17.5-6.7c.8-.3 1.5.2 1.3.7z"/></svg>',
-  yt: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2c-.3-1-1-1.8-2-2C19.2 4.7 12 4.7 12 4.7s-7.2 0-9 .5c-1 .3-1.8 1-2 2C.5 9 .5 12 .5 12s0 3 .5 4.8c.3 1 1 1.8 2 2 1.8.5 9 .5 9 .5s7.2 0 9-.5c1-.3 1.8-1 2-2 .5-1.8.5-4.8.5-4.8s0-3-.5-4.8zM9.8 15.3V8.7L15.7 12l-5.9 3.3z"/></svg>'
+  yt: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2c-.3-1-1-1.8-2-2C19.2 4.7 12 4.7 12 4.7s-7.2 0-9 .5c-1 .3-1.8 1-2 2C.5 9 .5 12 .5 12s0 3 .5 4.8c.3 1 1 1.8 2 2 1.8.5 9 .5 9 .5s7.2 0 9-.5c1-.3 1.8-1 2-2 .5-1.8.5-4.8.5-4.8s0-3-.5-4.8zM9.8 15.3V8.7L15.7 12l-5.9 3.3z"/></svg>',
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>'
 };
 
 // ---------- Шапка ----------
@@ -340,6 +342,45 @@ function renderStandings() {
     </tr>`).join('');
 }
 
+// ---------- Лидеры (бомбардиры / ассистенты / гол+пас) ----------
+function lbCard(title, icon, rows) {
+  const rowsHTML = rows.map((r, i) => `
+    <a class="lb-row${i >= 5 ? ' lb-extra' : ''}" href="player.html?id=${esc(r.id)}">
+      <span class="lb-rank${i < 3 ? ' top' : ''}">${i + 1}</span>
+      <span class="lb-name">${esc(r.name)}</span>
+      <span class="lb-val">${r.value}</span>
+    </a>`).join('');
+  const more = rows.length > 5 ? '<button class="lb-more" type="button"><span>Показать всех</span></button>' : '';
+  return `
+    <div class="lb-card reveal">
+      <div class="lb-head"><span class="lb-icon">${icon}</span><h3>${esc(title)}</h3></div>
+      ${rowsHTML || '<div class="lb-empty">Нет данных</div>'}
+      ${more}
+    </div>`;
+}
+function renderLeaderboards() {
+  const grid = $('#lb-grid');
+  if (!grid) return;
+  const ps = DATA.players || [];
+  const byVal = (get) => ps
+    .map(p => ({ p, v: get(p) }))
+    .filter(x => x.v > 0)
+    .sort((a, b) => b.v - a.v || (a.p.stats?.matches || 0) - (b.p.stats?.matches || 0) || a.p.name.localeCompare(b.p.name, 'ru'))
+    .map(x => ({ id: x.p.id, name: x.p.name, value: x.v }));
+  const goalsList = byVal(p => +(p.stats?.goals || 0));
+  const assistsList = byVal(p => +(p.stats?.assists || 0));
+  const gaList = byVal(p => +(p.stats?.goals || 0) + +(p.stats?.assists || 0));
+  grid.innerHTML =
+    lbCard('Бомбардиры', ICONS.ball, goalsList) +
+    lbCard('Ассистенты', ICONS.target, assistsList) +
+    lbCard('Гол + пас', ICONS.plus, gaList);
+  $$('.lb-more', grid).forEach(btn => btn.addEventListener('click', () => {
+    const card = btn.closest('.lb-card');
+    card.classList.toggle('expanded');
+    btn.querySelector('span').textContent = card.classList.contains('expanded') ? 'Свернуть' : 'Показать всех';
+  }));
+}
+
 // ---------- Страницы ----------
 function renderSquad() {
   const wrap = $('#squad-groups');
@@ -535,6 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderNews(6);
       renderMatches();
       renderStandings();
+      renderLeaderboards();
       break;
     case 'news': renderNewsPage(); break;
     case 'club-card': break;
