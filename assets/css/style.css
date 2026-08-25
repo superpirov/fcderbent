@@ -397,14 +397,14 @@ h1, h2, h3, .display { font-family: var(--font-display); font-weight: 700; line-
 
 /* ---------- Партнёры ---------- */
 .partners { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: clamp(36px, 5vw, 56px) 0; }
-.partners-grid { display: flex; justify-content: center; align-items: center; gap: clamp(40px, 8vw, 96px); flex-wrap: wrap; }
-.partner-logo { display: flex; align-items: center; justify-content: center; opacity: 0.85; transition: opacity 0.2s ease, transform 0.2s ease; }
-.partner-logo:hover { opacity: 1; transform: translateY(-3px); }
-.partner-logo img { height: 72px; width: auto; max-width: 280px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25)); }
-.partner-logo:nth-child(2) img { height: 110px; }
+.partners-grid { display: flex; justify-content: flex-start; align-items: center; gap: clamp(32px, 6vw, 64px); flex-wrap: wrap; }
+.partner-logo { display: flex; align-items: center; justify-content: center; opacity: 0.9; transition: opacity 0.2s ease, transform 0.2s ease; }
+.partner-logo:hover { opacity: 1; transform: translateY(-2px); }
+.partner-logo img { height: 48px; width: auto; max-width: 200px; object-fit: contain; }
+.partner-logo:nth-child(2) img { height: 62px; }
 @media (max-width: 640px) {
-  .partner-logo img { height: 56px; max-width: 220px; }
-  .partner-logo:nth-child(2) img { height: 88px; }
+  .partner-logo img { height: 40px; max-width: 160px; }
+  .partner-logo:nth-child(2) img { height: 52px; }
 }
 
 /* ---------- Подвал ---------- */
