@@ -395,6 +395,18 @@ h1, h2, h3, .display { font-family: var(--font-display); font-weight: 700; line-
 .lb-more:hover { border-color: var(--orange); color: var(--orange); }
 .lb-empty { padding: 24px 0; color: var(--muted-2); font-size: 14px; text-align: center; }
 
+/* ---------- Партнёры ---------- */
+.partners { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: clamp(36px, 5vw, 56px) 0; }
+.partners-grid { display: flex; justify-content: center; align-items: center; gap: clamp(40px, 8vw, 96px); flex-wrap: wrap; }
+.partner-logo { display: flex; align-items: center; justify-content: center; opacity: 0.85; transition: opacity 0.2s ease, transform 0.2s ease; }
+.partner-logo:hover { opacity: 1; transform: translateY(-3px); }
+.partner-logo img { height: 72px; width: auto; max-width: 280px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25)); }
+.partner-logo:nth-child(2) img { height: 110px; }
+@media (max-width: 640px) {
+  .partner-logo img { height: 56px; max-width: 220px; }
+  .partner-logo:nth-child(2) img { height: 88px; }
+}
+
 /* ---------- Подвал ---------- */
 .site-footer { background: #0d0702; border-top: 1px solid var(--line); margin-top: 40px; position: relative; z-index: 1; }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.3fr; gap: 36px; padding: clamp(44px, 6vw, 72px) 0 44px; }

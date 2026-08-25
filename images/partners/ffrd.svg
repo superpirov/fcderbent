@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 520" width="400" height="520" role="img" aria-label="Федерация футбола Республики Дагестан">
+  <!-- Орёл — упрощённый белый силуэт -->
+  <g fill="#ffffff" stroke="none">
+    <!-- Левое крыло -->
+    <path d="M150 95 L72 34 L32 92 L68 138 L32 168 L92 196 L68 228 L132 252 L168 272 L186 242 L162 172 L148 138 L150 95 Z"/>
+    <!-- Правое крыло (частично за корпусом) -->
+    <path d="M250 98 L328 86 L354 128 L318 172 L348 198 L282 232 L252 212 L262 172 L250 138 L250 98 Z"/>
+    <!-- Корпус и хвост -->
+    <path d="M168 172 L232 172 L242 242 L228 272 L212 288 L188 288 L172 272 L158 242 Z"/>
+    <!-- Хвост-спираль (декоративный завиток) -->
+    <path d="M188 228 C175 228 162 235 162 250 C162 265 175 274 188 274 C200 274 210 265 210 250 C210 242 205 235 196 235 C188 235 184 241 184 248 C184 254 188 258 194 258" fill="none" stroke="#211409" stroke-width="5" stroke-linecap="round" opacity="0.95"/>
+    <path d="M188 228 C175 228 162 235 162 250 C162 265 175 274 188 274 C200 274 210 265 210 250 C210 242 205 235 196 235 C188 235 184 241 184 248 C184 254 188 258 194 258" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Шея и голова -->
+    <path d="M210 172 L245 128 L268 102 L282 98 L288 108 L275 124 L252 138 L232 172 Z"/>
+    <circle cx="276" cy="106" r="3.2" fill="#211409"/>
+    <!-- Клюв -->
+    <path d="M288 108 L272 118 L282 98 Z" fill="#ffffff"/>
+    <!-- Лапы на мяче -->
+    <path d="M186 272 L174 298 L188 302 L200 284 Z"/>
+    <path d="M214 272 L228 298 L212 302 L200 284 Z"/>
+  </g>
+  <!-- Мяч -->
+  <g stroke="#ffffff" stroke-width="3.2" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <circle cx="200" cy="400" r="68"/>
+    <!-- Внутренние линии мяча (упрощённый узор) -->
+    <path d="M200 332 L200 360 M200 440 L200 468 M132 400 L160 400 M240 400 L268 400 M152 358 L172 376 M228 376 L248 358 M152 442 L172 424 M228 424 L248 442"/>
+    <!-- Пятиугольники (заливка белая для контраста) -->
+    <g fill="#ffffff" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round">
+      <polygon points="200,368 218,380 212,402 188,402 182,380"/>
+      <polygon points="160,400 178,412 172,434 148,434 142,412"/>
+      <polygon points="240,400 258,412 252,434 228,434 222,412"/>
+      <polygon points="182,432 200,444 218,432 212,454 188,454"/>
+    </g>
+  </g>
+  <!-- Круговая надпись -->
+  <defs>
+    <path id="ffrd-circle" d="M 132 400 A 84 84 0 1 1 268 400 A 84 84 0 1 1 132 400"/>
+  </defs>
+  <text fill="#ffffff" font-family="'Manrope',Arial,sans-serif" font-size="13.5" font-weight="700" letter-spacing="1.6">
+    <textPath href="#ffrd-circle" startOffset="50%" text-anchor="middle" dominant-baseline="middle">ФЕДЕРАЦИЯ ФУТБОЛА РЕСПУБЛИКИ ДАГЕСТАН •</textPath>
+  </text>
+</svg>
