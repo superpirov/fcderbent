@@ -10,6 +10,7 @@ const SESSION_KEY = 'fcderbent_admin_session';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+let ADMIN_TOKEN = (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('fcderbent_token')) || '';
 
 // ---------- Хеш пароля (djb2) ----------
 function pwHash(s) {
@@ -574,10 +575,23 @@ function scheduleMiniTable() {
 function markDirty() { DIRTY = true; $('#dirty-dot').classList.add('show'); }
 function clearDirty() { DIRTY = false; $('#dirty-dot').classList.remove('show'); }
 
-function savePreview() {
+async function savePreview() {
+  // На Timeweb (PHP) — сохраняем сразу на сервер, на GitHub Pages — падаем в localStorage
+  try {
+    const r = await fetch('admin-save.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': ADMIN_TOKEN },
+      body: JSON.stringify(DATA)
+    });
+    if (r.ok) {
+      const j = await r.json();
+      if (j.ok) { clearDirty(); toast('Сохранено! Изменения сразу на сайте.'); return; }
+    }
+    if (r.status === 403) toast('Ошибка доступа — проверьте пароль. Сохранено только в предпросмотр.');
+  } catch (e) { /* GitHub Pages: файла нет — идём в fallback */ }
   localStorage.setItem(LS_KEY, JSON.stringify(DATA));
   clearDirty();
-  toast('Сохранено! Откройте сайт — изменения видны в этом браузере.');
+  toast('Сохранено в предпросмотр. На GitHub Pages — сделайте Экспорт data.js.');
 }
 function exportData() {
   const text = '// Данные сайта ФК «Дербент» (сгенерировано в админ-панели)\n// Замените этим файлом data/data.js в репозитории и сделайте push.\nwindow.SITE_DATA = ' + JSON.stringify(DATA, null, 2) + ';\n';
@@ -647,11 +661,11 @@ function init() {
   $('#save-btn').addEventListener('click', savePreview);
   $('#export-btn').addEventListener('click', exportData);
   $('#reset-btn').addEventListener('click', resetChanges);
-  $('#logout-btn').addEventListener('click', () => { sessionStorage.removeItem(SESSION_KEY); location.reload(); });
+  $('#logout-btn').addEventListener('click', () => { sessionStorage.removeItem(SESSION_KEY); sessionStorage.removeItem('fcderbent_token'); location.reload(); });
   $('#login-form').addEventListener('submit', e => {
     e.preventDefault();
     const pw = $('#login-password').value;
-    if (tryLogin(pw)) { sessionStorage.setItem(SESSION_KEY, '1'); showAdmin(); }
+    if (tryLogin(pw)) { ADMIN_TOKEN = pwHash(pw); sessionStorage.setItem(SESSION_KEY, '1'); sessionStorage.setItem('fcderbent_token', ADMIN_TOKEN); showAdmin(); }
     else $('#login-error').textContent = 'Неверный пароль';
   });
   if (sessionStorage.getItem(SESSION_KEY) === '1') showAdmin();
