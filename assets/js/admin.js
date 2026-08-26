@@ -55,6 +55,7 @@ const SECTIONS = [
   { id: 'management', title: 'Руководство' },
   { id: 'vacancies', title: 'Вакансии' },
   { id: 'pages', title: 'Страницы' },
+  { id: 'analytics', title: 'Посещаемость' },
   { id: 'export', title: 'Экспорт / Импорт' }
 ];
 
@@ -384,6 +385,106 @@ function sectionExport() {
     </div>`;
 }
 
+let ANALYTICS_CHART = null;
+function sectionAnalytics() {
+  return `
+    <div class="hint">Посещаемость сайта по данным <code>visit.php</code> (работает только на хостинге с PHP, на GitHub Pages — не считается). Боты не учитываются.</div>
+    <div id="analytics-summary" class="info-grid" style="margin-bottom:18px"></div>
+    <div class="block open" data-block="a-chart">
+      <div class="block-head" data-action="toggle" data-id="a-chart"><div><div class="b-title">График</div></div><div class="spacer"></div><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="block-body" style="display:block">
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <button class="btn btn-sm btn-primary" data-a-range="days">По дням (30)</button>
+          <button class="btn btn-sm btn-outline" data-a-range="weeks">По неделям (12)</button>
+          <button class="btn btn-sm btn-outline" data-a-range="months">По месяцам (12)</button>
+        </div>
+        <canvas id="analytics-canvas" height="140"></canvas>
+        <div id="analytics-table" style="margin-top:18px;overflow-x:auto"></div>
+      </div>
+    </div>
+    <p id="analytics-status" style="margin-top:12px;color:var(--muted);font-size:13px"></p>`;
+}
+async function loadAnalytics(range = 'days') {
+  const status = document.getElementById('analytics-status');
+  const summary = document.getElementById('analytics-summary');
+  const canvas = document.getElementById('analytics-canvas');
+  const tableWrap = document.getElementById('analytics-table');
+  if (!canvas) return;
+  try {
+    const r = await fetch('visit.php?read=1', { headers: { 'X-Admin-Token': ADMIN_TOKEN } });
+    if (!r.ok) throw new Error(r.status === 403 ? 'Нет доступа' : 'HTTP ' + r.status);
+    const data = await r.json();
+    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('empty');
+    const today = new Date().toISOString().slice(0,10);
+    const yest = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    const total = Object.values(data).reduce((s,v)=>s+(+v||0),0);
+    const last7 = Object.entries(data).filter(([d])=> new Date(d) >= new Date(Date.now()-6*86400000)).reduce((s,[,v])=>s+(+v||0),0);
+    const last30 = Object.entries(data).filter(([d])=> new Date(d) >= new Date(Date.now()-29*86400000)).reduce((s,[,v])=>s+(+v||0),0);
+    summary.innerHTML = `
+      <div class="info-card"><div class="ic-icon">📅</div><h4>Сегодня</h4><p style="font-size:22px;color:var(--orange);font-weight:800">${data[today]||0}</p></div>
+      <div class="info-card"><div class="ic-icon">📅</div><h4>Вчера</h4><p style="font-size:22px;font-weight:800">${data[yest]||0}</p></div>
+      <div class="info-card"><div class="ic-icon">📊</div><h4>7 дней</h4><p style="font-size:22px;font-weight:800">${last7}</p></div>
+      <div class="info-card"><div class="ic-icon">📊</div><h4>30 дней</h4><p style="font-size:22px;font-weight:800">${last30}</p></div>
+      <div class="info-card"><div class="ic-icon">👁️</div><h4>Всего</h4><p style="font-size:22px;font-weight:800">${total}</p></div>`;
+    renderAnalyticsChart(data, range);
+    status.textContent = 'Обновлено: ' + new Date().toLocaleString('ru-RU');
+    // Переключение вкладок
+    canvas.closest('.block-body').querySelectorAll('[data-a-range]').forEach(b=>{
+      b.onclick = ()=>{ canvas.closest('.block-body').querySelectorAll('[data-a-range]').forEach(x=>{x.className='btn btn-sm btn-outline'}); b.className='btn btn-sm btn-primary'; renderAnalyticsChart(data, b.dataset.aRange); };
+    });
+  } catch(e) {
+    summary.innerHTML = '';
+    if (tableWrap) tableWrap.innerHTML = '';
+    status.textContent = 'Нет данных или доступно только на хостинге с PHP. ' + (e.message || '');
+    if (ANALYTICS_CHART) { ANALYTICS_CHART.destroy(); ANALYTICS_CHART = null; }
+  }
+}
+function renderAnalyticsChart(data, range) {
+  const canvas = document.getElementById('analytics-canvas');
+  const tableWrap = document.getElementById('analytics-table');
+  if (!canvas || typeof Chart === 'undefined') return;
+  const labels = [], values = [];
+  const now = new Date();
+  if (range === 'days') {
+    for (let i=29;i>=0;i--) {
+      const d = new Date(now); d.setDate(now.getDate()-i);
+      const iso = d.toISOString().slice(0,10);
+      labels.push(d.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'}));
+      values.push(data[iso]||0);
+    }
+  } else if (range === 'weeks') {
+    // 12 недель, начиная с понедельника
+    const monday = new Date(now); const day = monday.getDay(); const diff = day===0?-6:1-day; monday.setDate(now.getDate()+diff);
+    for (let i=11;i>=0;i--) {
+      const start = new Date(monday); start.setDate(monday.getDate()-i*7);
+      const end = new Date(start); end.setDate(start.getDate()+6);
+      let sum=0;
+      for (let d=new Date(start); d<=end; d.setDate(d.getDate()+1)) {
+        const iso=d.toISOString().slice(0,10); sum+=data[iso]||0;
+      }
+      labels.push(start.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'})+'–'+end.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'}));
+      values.push(sum);
+    }
+  } else {
+    for (let i=11;i>=0;i--) {
+      const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+      const key = d.toISOString().slice(0,7);
+      let sum=0;
+      Object.entries(data).forEach(([iso,v])=>{ if(iso.startsWith(key)) sum+=+v||0; });
+      labels.push(d.toLocaleDateString('ru-RU',{month:'short',year:'2-digit'}));
+      values.push(sum);
+    }
+  }
+  if (ANALYTICS_CHART) ANALYTICS_CHART.destroy();
+  ANALYTICS_CHART = new Chart(canvas, {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Просмотры', data: values, backgroundColor: 'rgba(240,131,30,0.85)', borderColor: '#f0831e', borderWidth: 1, borderRadius: 6 }] },
+    options: { responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{precision:0}}, x:{ticks:{maxRotation:45}}} }
+  });
+  tableWrap.innerHTML = '<table class="mini-table"><thead><tr><th>Период</th><th>Просмотры</th></tr></thead><tbody>'
+    + labels.map((l,i)=>`<tr><td class="t-left">${l}</td><td><b>${values[i]}</b></td></tr>`).join('') + '</tbody></table>';
+}
+
 // ---------- Рендер ----------
 function render() {
   const sec = SECTIONS.find(s => s.id === SECTION);
@@ -407,6 +508,7 @@ function render() {
     case 'management': root.innerHTML = peopleSection('management', 'Руководство клуба'); break;
     case 'vacancies': root.innerHTML = sectionVacancies(); break;
     case 'pages': root.innerHTML = sectionPages(); break;
+    case 'analytics': root.innerHTML = sectionAnalytics(); setTimeout(()=>loadAnalytics('days'), 80); break;
     case 'export': root.innerHTML = sectionExport(); break;
   }
   bindExportButtons();

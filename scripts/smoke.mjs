@@ -37,7 +37,9 @@ function run(file, sandbox) {
     console, setTimeout, clearTimeout, confirm: () => true, scrollTo: () => {},
     document: doc, localStorage: mkStore(), sessionStorage: mkStore(),
     FileReader: class { readAsDataURL() {} readAsText() {} },
-    Blob: class {}, URL: { createObjectURL: () => 'b', revokeObjectURL: () => {} }
+    Blob: class {}, URL: { createObjectURL: () => 'b', revokeObjectURL: () => {} },
+    fetch: async () => ({ ok: true, status: 200, json: async () => ({}), text: async () => '{}' }),
+    Chart: class { constructor(){} destroy(){} }
   };
   sb.window = sb; sb.globalThis = sb;
   vm.createContext(sb);
@@ -47,7 +49,7 @@ function run(file, sandbox) {
   getEl('#login-password').value = 'derbent1966';
   getEl('#login-form')._h['submit']({ preventDefault() {} });
   if (getEl('#admin-layout').style.display !== '') throw new Error('admin: layout not shown after login');
-  for (const s of ['settings', 'news', 'teams', 'matches', 'players', 'coaches', 'management', 'vacancies', 'pages', 'export']) {
+  for (const s of ['settings', 'news', 'teams', 'matches', 'players', 'coaches', 'management', 'vacancies', 'pages', 'analytics', 'export']) {
     getEl('#side-nav')._h['click']({ target: { closest: () => ({ dataset: { section: s } }) } });
     const html = getEl('#admin-root').innerHTML;
     if (!html || html.length < 50) throw new Error('admin: section "' + s + '" rendered empty');
@@ -69,7 +71,7 @@ function run(file, sandbox) {
     if (after !== before + 1) throw new Error(`admin: ${action} failed (${before} -> ${after})`);
     if (!getEl('#admin-root').innerHTML.includes(expect)) throw new Error(`admin: ${action} block content missing`);
   }
-  console.log('ADMIN SMOKE OK — вход, 10 секций и все кнопки добавления работают');
+  console.log('ADMIN SMOKE OK — вход, 11 секций и все кнопки добавления работают');
 }
 
 // ---------- Главная ----------
@@ -81,7 +83,8 @@ function run(file, sandbox) {
     document: doc, localStorage: mkStore(), sessionStorage: mkStore(),
     location: { pathname: '/fcderbent/index.html' },
     IntersectionObserver: class { observe() {} unobserve() {} },
-    addEventListener() {}
+    addEventListener() {},
+    fetch: async () => ({ ok: true, json: async () => ({}), catch: () => {} })
   };
   sb.window = sb; sb.globalThis = sb;
   vm.createContext(sb);

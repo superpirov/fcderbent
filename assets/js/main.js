@@ -618,4 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   initReveal();
+  if (!location.pathname.includes('admin.html')) {
+    try { fetch('visit.php', {method:'POST', keepalive:true, headers:{'Content-Type':'application/json'}, body: JSON.stringify({path: location.pathname})}).catch(()=>{}); } catch(e){}
+  }
 });
