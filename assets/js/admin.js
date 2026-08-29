@@ -405,6 +405,7 @@ function sectionAnalytics() {
     <p id="analytics-status" style="margin-top:12px;color:var(--muted);font-size:13px"></p>`;
 }
 async function loadAnalytics(range = 'days') {
+  const getVal = (v)=>{ if(v==null) return 0; if(typeof v==='object') return +(v.count ?? v.unique ?? v.hits ?? 0); return +v||0; };
   const status = document.getElementById('analytics-status');
   const summary = document.getElementById('analytics-summary');
   const canvas = document.getElementById('analytics-canvas');
@@ -417,12 +418,12 @@ async function loadAnalytics(range = 'days') {
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('empty');
     const today = new Date().toISOString().slice(0,10);
     const yest = new Date(Date.now() - 86400000).toISOString().slice(0,10);
-    const total = Object.values(data).reduce((s,v)=>s+(+v||0),0);
-    const last7 = Object.entries(data).filter(([d])=> new Date(d) >= new Date(Date.now()-6*86400000)).reduce((s,[,v])=>s+(+v||0),0);
-    const last30 = Object.entries(data).filter(([d])=> new Date(d) >= new Date(Date.now()-29*86400000)).reduce((s,[,v])=>s+(+v||0),0);
+    const total = Object.values(data).reduce((s,v)=>s+getVal(v),0);
+    const last7 = Object.entries(data).filter(([d])=> new Date(d) >= new Date(Date.now()-6*86400000)).reduce((s,[,v])=>s+getVal(v),0);
+    const last30 = Object.entries(data).filter(([d])=> new Date(d) >= new Date(Date.now()-29*86400000)).reduce((s,[,v])=>s+getVal(v),0);
     summary.innerHTML = `
-      <div class="info-card"><div class="ic-icon">📅</div><h4>Сегодня</h4><p style="font-size:22px;color:var(--orange);font-weight:800">${data[today]||0}</p></div>
-      <div class="info-card"><div class="ic-icon">📅</div><h4>Вчера</h4><p style="font-size:22px;font-weight:800">${data[yest]||0}</p></div>
+      <div class="info-card"><div class="ic-icon">📅</div><h4>Сегодня</h4><p style="font-size:22px;color:var(--orange);font-weight:800">${getVal(data[today])}</p><small style="color:var(--muted)">уникальных</small></div>
+      <div class="info-card"><div class="ic-icon">📅</div><h4>Вчера</h4><p style="font-size:22px;font-weight:800">${getVal(data[yest])}</p><small style="color:var(--muted)">уникальных</small></div>
       <div class="info-card"><div class="ic-icon">📊</div><h4>7 дней</h4><p style="font-size:22px;font-weight:800">${last7}</p></div>
       <div class="info-card"><div class="ic-icon">📊</div><h4>30 дней</h4><p style="font-size:22px;font-weight:800">${last30}</p></div>
       <div class="info-card"><div class="ic-icon">👁️</div><h4>Всего</h4><p style="font-size:22px;font-weight:800">${total}</p></div>`;
@@ -450,7 +451,7 @@ function renderAnalyticsChart(data, range) {
       const d = new Date(now); d.setDate(now.getDate()-i);
       const iso = d.toISOString().slice(0,10);
       labels.push(d.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'}));
-      values.push(data[iso]||0);
+      values.push(getVal(data[iso]));
     }
   } else if (range === 'weeks') {
     // 12 недель, начиная с понедельника
@@ -460,7 +461,7 @@ function renderAnalyticsChart(data, range) {
       const end = new Date(start); end.setDate(start.getDate()+6);
       let sum=0;
       for (let d=new Date(start); d<=end; d.setDate(d.getDate()+1)) {
-        const iso=d.toISOString().slice(0,10); sum+=data[iso]||0;
+        const iso=d.toISOString().slice(0,10); sum+=getVal(data[iso]);
       }
       labels.push(start.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'})+'–'+end.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'}));
       values.push(sum);
@@ -470,7 +471,7 @@ function renderAnalyticsChart(data, range) {
       const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
       const key = d.toISOString().slice(0,7);
       let sum=0;
-      Object.entries(data).forEach(([iso,v])=>{ if(iso.startsWith(key)) sum+=+v||0; });
+      Object.entries(data).forEach(([iso,v])=>{ if(iso.startsWith(key)) sum+=getVal(v); });
       labels.push(d.toLocaleDateString('ru-RU',{month:'short',year:'2-digit'}));
       values.push(sum);
     }
@@ -478,7 +479,7 @@ function renderAnalyticsChart(data, range) {
   if (ANALYTICS_CHART) ANALYTICS_CHART.destroy();
   ANALYTICS_CHART = new Chart(canvas, {
     type: 'bar',
-    data: { labels, datasets: [{ label: 'Просмотры', data: values, backgroundColor: 'rgba(240,131,30,0.85)', borderColor: '#f0831e', borderWidth: 1, borderRadius: 6 }] },
+    data: { labels, datasets: [{ label: 'Уникальные посетители', data: values, backgroundColor: 'rgba(240,131,30,0.85)', borderColor: '#f0831e', borderWidth: 1, borderRadius: 6 }] },
     options: { responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{precision:0}}, x:{ticks:{maxRotation:45}}} }
   });
   tableWrap.innerHTML = '<table class="mini-table"><thead><tr><th>Период</th><th>Просмотры</th></tr></thead><tbody>'
