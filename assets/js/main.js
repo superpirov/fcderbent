@@ -548,15 +548,46 @@ function emptyStateHTML(title, text) {
 }
 
 // ---------- Формы ----------
-function bindForm(formSel, successSel, successText) {
+function bindForm(formSel, successSel, endpoint) {
   const form = $(formSel);
   if (!form) return;
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
-    form.reset();
-    const ok = $(successSel);
-    if (ok) { ok.classList.add('show'); ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    const btn = form.querySelector('[type="submit"]');
+    const oldErr = form.parentElement ? form.parentElement.querySelector('.form-error') : null;
+    if (oldErr) oldErr.remove();
+    const oldText = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Отправка...'; }
+    try {
+      const fd = new FormData(form);
+      const payload = {};
+      fd.forEach((v, k) => { payload[k] = String(v).trim(); });
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 15000);
+      const r = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      let data = null;
+      try { data = await r.json(); } catch (_) { /* ignore */ }
+      if (!r.ok || !data || data.ok !== true) {
+        throw new Error((data && data.error) || ('HTTP ' + r.status));
+      }
+      form.reset();
+      const ok = $(successSel);
+      if (ok) { ok.classList.add('show'); ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    } catch (err) {
+      const div = document.createElement('div');
+      div.className = 'form-error';
+      div.textContent = 'Не удалось отправить. Проверьте соединение и попробуйте позже.';
+      form.after(div);
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = oldText; }
+    }
   });
 }
 
@@ -586,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (intro) intro.innerHTML = paragraphs(DATA.vacanciesIntro);
       const ok = $('#vacancies-success');
       if (ok && DATA.vacanciesSuccess) ok.querySelector('span').textContent = DATA.vacanciesSuccess;
-      bindForm('#vacancies-form', '#vacancies-success');
+      bindForm('#vacancies-form', '#vacancies-success', 'vacancy.php');
       break;
     }
     case 'squad': renderSquad(); break;
@@ -613,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const tel = $('#c-phone-link'); if (tel) { tel.href = 'tel:' + (c.phone || '').replace(/[^+\d]/g, ''); }
       const tel2 = $('#c-phone-extra-link'); if (tel2) { tel2.href = 'tel:' + (c.phoneExtra || '').replace(/[^+\d]/g, ''); }
       const mail = $('#c-email-link'); if (mail) { mail.href = 'mailto:' + (c.email || ''); }
-      bindForm('#contacts-form', '#contacts-success');
+      bindForm('#contacts-form', '#contacts-success', 'contact.php');
       break;
     }
   }

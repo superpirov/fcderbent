@@ -365,6 +365,11 @@ h1, h2, h3, .display { font-family: var(--font-display); font-weight: 700; line-
 }
 .form-success.show { display: flex; }
 .form-success svg { width: 22px; height: 22px; flex: 0 0 22px; margin-top: 2px; }
+.form-error {
+  display: flex; align-items: flex-start; gap: 12px; background: rgba(214, 48, 49, 0.10);
+  border: 1px solid rgba(214, 48, 49, 0.45); border-radius: var(--radius-sm);
+  padding: 14px 16px; color: #ff9a9a; font-weight: 600; margin-top: 16px;
+}
 
 /* ---------- Пустое состояние ---------- */
 .empty-state { text-align: center; padding: clamp(60px, 10vw, 110px) 20px; }
